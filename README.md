@@ -18,6 +18,8 @@ In order to save your video it must be encoded into a video codec. Some examples
 **Use FFmpeg to capture, deinterlace, and encode your video all at once.**
 This method uses little storage space, and doesn't require any 2nd processing steps.
 
+Software: [FFmpeg](SOFTWARE.md#ffmpeg), [Avidemux](SOFTWARE.md#avidemux) (optional)
+
 1. Choose a folder you want to save your video to, and hold down shift and right click.
 2. Choose "Open PowerShell window here"
 3. List your capture devices with this command:
@@ -47,8 +49,10 @@ ffmpeg -f dshow -video_size 720x480 -framerate 29.97 -pixel_format yuyv422 -i vi
 
 
 ## Method 2
-**Use AmaRecTV to capture, and FFmpeg to encode and deinterlace**
+**Use AmaRecTV to capture, and FFmpeg to encode and deinterlace.**
 This method uses signifcant disk space as it records to uncompressed AVI. It also takes more time since it requires a 2nd step to encode it to a more efficient format.
+
+Software: [AmaRecTV](SOFTWARE.md#amarectv-and-huffyuv), [FFmpeg](SOFTWARE.md#ffmpeg), [Avidemux](SOFTWARE.md#avidemux) (optional)
 
 1. Open AmaRecTV and verify your video shows up fine.
 2. Click the play button to record, and stop when you're done.
@@ -61,8 +65,10 @@ ffmpeg -i 'amarec(XXXXXXXXXX).avi' -c:v libx264 -crf 18 -aspect 4:3 -vf "yadif=1
 The only difference here from above is using `-i filename.avi` instead of DirectShow for the input.
 
 ## Method 3
-**Use AmaRecTV to capture, AviSynth and QTGMC to deinterlace, and FFmpeg to encode**
+**Use AmaRecTV to capture, AviSynth and QTGMC to deinterlace, and FFmpeg to encode.**
 This method takes signifcant disk space and signifcant time to process and encode the video, but it produces the best results.
+
+Software: [AmaRecTV](SOFTWARE.md#amarectv-and-huffyuv), [AviSynth](SOFTWARE.md#avisynth-and-qtgmc), [FFmpeg](SOFTWARE.md#ffmpeg), [Avidemux](SOFTWARE.md#avidemux) (optional)
 
 1. Open AmaRecTV and verify your video shows up fine.
 2. Click the play button to record, and stop when you're done.
