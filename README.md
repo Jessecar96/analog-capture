@@ -1,5 +1,8 @@
 # How to capture, deinterlace, and encode analog video
 
+## Notice
+This guide is still a work in progress, some things might not be complete.
+
 ## Introduction
 I've spent about 3 years now trying various methods to get the best captures of old analog video such as VHS and Video8/Hi8 tapes. A lot of what I've read describes ways to do this for old TVs, DVDs, or old computers which just isn't going to cut it in 2018.
 I have 3 methods of capturing and encoding. I personally use a mix of the 3 depending on what I'm capturing.
@@ -16,7 +19,7 @@ In order to save your video it must be encoded into a video codec. Some examples
 ## Method 1
 
 **Use FFmpeg to capture, deinterlace, and encode your video all at once.**
-This method uses little storage space, and doesn't require any 2nd processing steps.
+This method uses little storage space and doesn't require any 2nd processing steps.
 
 Software: [FFmpeg](SOFTWARE.md#ffmpeg), [Avidemux](SOFTWARE.md#avidemux) (optional)
 
@@ -26,7 +29,7 @@ Software: [FFmpeg](SOFTWARE.md#ffmpeg), [Avidemux](SOFTWARE.md#avidemux) (option
 ```
 ffmpeg -list_devices true -f dshow -i dummy
 ```
-4. Find the audio and video device that cooresponds to your capture device. Mine are `Hauppauge Cx23100 Video Capture` and `Hauppauge Cx23100 Audio Capture`.
+4. Find the audio and video device that corresponds to your capture device. Mine are `Hauppauge Cx23100 Video Capture` and `Hauppauge Cx23100 Audio Capture`.
 5. Use this command to record your video. Make sure to substitute in your capture devices.
 ```
 ffmpeg -f dshow -video_size 720x480 -framerate 29.97 -pixel_format yuyv422 -i video="Hauppauge Cx23100 Video Capture":audio="Hauppauge Cx23100 Audio Capture" -c:v libx264 -crf 18 -aspect 4:3 -vf "yadif=1" -pix_fmt yuv420p -c:a aac -b:a 392k recording.mp4
@@ -50,14 +53,14 @@ ffmpeg -f dshow -video_size 720x480 -framerate 29.97 -pixel_format yuyv422 -i vi
 
 ## Method 2
 **Use AmaRecTV to capture, and FFmpeg to encode and deinterlace.**
-This method uses signifcant disk space as it records to uncompressed AVI. It also takes more time since it requires a 2nd step to encode it to a more efficient format.
+This method uses significant disk space as it records to uncompressed AVI. It also takes more time since it requires a 2nd step to encode it to a more efficient format.
 
 Software: [AmaRecTV](SOFTWARE.md#amarectv-and-huffyuv), [FFmpeg](SOFTWARE.md#ffmpeg), [Avidemux](SOFTWARE.md#avidemux) (optional)
 
 1. Open AmaRecTV and verify your video shows up fine.
-2. Click the play button to record, and stop when you're done.
+2. Click the play button to record and stop when you're done.
 3. You can use the mute and unmute button to monitor your audio. This does not affect your recording.
-4. Optionally use avidemux to cut the beging and end off your video. Make sure to use "Copy" for both the video and audio formats, and save as AVI.
+4. Optionally use avidemux to cut the begining and end off your video. Make sure to use "Copy" for both the video and audio formats, and save as AVI.
 5. Use ffmpeg to encode your uncompressed video to H.264 video. Make sure to change the input file name.
 ```
 ffmpeg -i 'amarec(XXXXXXXXXX).avi' -c:v libx264 -crf 18 -aspect 4:3 -vf "yadif=1" -pix_fmt yuv420p -c:a aac -b:a 384k output.mp4
@@ -66,14 +69,14 @@ The only difference here from above is using `-i filename.avi` instead of Direct
 
 ## Method 3
 **Use AmaRecTV to capture, AviSynth and QTGMC to deinterlace, and FFmpeg to encode.**
-This method takes signifcant disk space and signifcant time to process and encode the video, but it produces the best results.
+This method takes significant disk space and signifcant time to process and encode the video, but it produces the best results.
 
 Software: [AmaRecTV](SOFTWARE.md#amarectv-and-huffyuv), [AviSynth](SOFTWARE.md#avisynth-and-qtgmc), [FFmpeg](SOFTWARE.md#ffmpeg), [Avidemux](SOFTWARE.md#avidemux) (optional)
 
 1. Open AmaRecTV and verify your video shows up fine.
-2. Click the play button to record, and stop when you're done.
+2. Click the play button to record and stop when you're done.
 3. You can use the mute and unmute button to monitor your audio. This does not affect your recording.
-4. Optionally use avidemux to cut the beging and end off your video. Make sure to use "Copy" for both the video and audio formats, and save as AVI.
+4. Optionally use avidemux to cut the begining and end off your video. Make sure to use "Copy" for both the video and audio formats, and save as AVI.
 5. Create a text file and save it as `deinterlace.avs` with this content:
 ```
 import("C:\Program Files (x86)\AviSynth+\plugins64+\MT.avs")
@@ -84,7 +87,7 @@ Cnr2() # Reduce chroma noise
 DeHalo_alpha() # De-halo
 Prefetch(8) # Use 8 threads, enter your CPU thread count here!
 ```
-6. Change your input file name in AviSource, and enter your CPU's thread count in Prefetch.
+6. Change your input file name in AviSource and enter your CPU's thread count in Prefetch.
 7. Now use FFmpeg to process this script and encode the video:
 ```
 ffmpeg -i 'deinterlace.avs' -c:v libx264 -crf 18 -aspect 4:3 -pix_fmt yuv420p -c:a aac -b:a 384k output.mp4
